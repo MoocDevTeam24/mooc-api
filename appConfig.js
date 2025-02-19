@@ -1,0 +1,20 @@
+module.exports = {
+  jwtConfig: {
+    secret: "shhhhhha3red-secret",
+    audience: "apitester",
+    issuer: "issuer",
+    algorithms: ["HS256"],
+    expiresIn: "2h",
+  },
+  mysqlConfig: {
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "12345678",
+    database: "moocdb",
+  },
+  redisConfig: {
+    host: "127.0.0.1",
+    port: 6379,
+  }
+};
