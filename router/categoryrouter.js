@@ -52,4 +52,36 @@ router.get(
   categoryController.getCategoryListAsync
 );
 
+/**
+ * @openapi
+ * '/api/categories/{ids}':
+ *  delete:
+ *     tags:
+ *     - Category Controller
+ *     summary: delete a category by Id
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *      - name: ids
+ *        in: path
+ *        description: The id of the category
+ *        required: true
+ *     responses:
+ *      200:
+ *        description: Fetched Successfully
+ *      400:
+ *        description: Bad Request
+ *      401:
+ *        description: Unauthorized
+ *      404:
+ *        description: Not Found
+ *      500:
+ *        description: Server Error
+ */
+router.delete(
+  "/:ids",
+  param([param("ids").notEmpty().withMessage("Not a valid id")]),
+  categoryController.deleteCategoryByIdAsync
+);
+
 module.exports = router;

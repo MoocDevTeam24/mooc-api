@@ -32,4 +32,22 @@ const getCategoryListAsync = async (page, pageSize) => {
   return result;
 };
 
-module.exports = { getCategoryListAsync };
+const deleteCategoryByIdAsync = async (idsString) => {
+  const ids = idsString.split(",").map((id) => parseInt(id));
+  const deleteCount = await Category.destroy({
+    where: {
+      id: ids,
+    },
+  });
+
+  if (deleteCount > 0) {
+    return { isSuccess: true, message: "Deleted successfully" };
+  }
+
+  return { isSuccess: false, message: "No matching categories found" };
+};
+
+module.exports = {
+  getCategoryListAsync,
+  deleteCategoryByIdAsync,
+};
