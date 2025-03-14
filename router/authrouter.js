@@ -4,7 +4,7 @@ var router = express.Router();
 
 const { body } = require("express-validator");
 const { commonValidate } = require("../middleware/expressValidator");
-const { loginValidator } = require("../validators/authValidator");
+const { loginValidator } = require("../validator/authValidator");
 
 var authcontroller = require("../controller/authcontroller");
 
