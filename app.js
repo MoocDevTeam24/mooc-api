@@ -32,7 +32,7 @@ const { jwtConfig } = require("./appConfig");
 let { expressjwt: jwt } = require("express-jwt");
 app.use(
   jwt({ secret: jwtConfig.secret, algorithms: jwtConfig.algorithms }).unless({
-    path: ["/", , "/api-docs", "/api/auth/login", "/api/auth/loginOut"],
+    path: ["/", "/api-docs", "/api/auth/login", "/api/auth/loginOut"],
   })
 );
 
