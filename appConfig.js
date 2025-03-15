@@ -1,21 +1,10 @@
 module.exports = {
   jwtConfig: {
-    secret: "shhhhhha3red-secret",
-    audience: "apitester",
-    issuer: "issuer",
+    secret: process.env.JWT_SECRET,
+    audience: process.env.JWT_AUDIENCE,
+    issuer: process.env.JWT_ISSUER,
     algorithms: ["HS256"],
-    expiresIn: "2h",
-  },
-  mysqlConfig: {
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "12345678",
-    database: "moocdb",
-  },
-  redisConfig: {
-    host: "127.0.0.1",
-    port: 6379,
+    expiresIn: process.env.JWT_EXPIRES_IN,
   },
   mysqlConfig: {
     host: process.env.MYSQL_HOST,
@@ -23,5 +12,9 @@ module.exports = {
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
+  },
+  redisConfig: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
   },
 };
