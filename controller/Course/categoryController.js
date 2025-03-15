@@ -4,6 +4,7 @@ const getCategoryListAsync = async (req, res) => {
   const page = parseInt(req.params.page);
   const pageSize = parseInt(req.params.pageSize);
   const result = await CategoryService.getCategoryListAsync(page, pageSize);
+
   if (result.isSuccess) {
     res.sendCommonValue(result.data, "success", 1);
   } else {
@@ -12,7 +13,7 @@ const getCategoryListAsync = async (req, res) => {
 };
 
 const addCategoryAsync = async (req, res) => {
-  let dbResult = await CategoryService.getCategoryByNameAsync(
+  const dbResult = await CategoryService.getCategoryByNameAsync(
     req.body.CategoryName
   );
 
@@ -22,6 +23,7 @@ const addCategoryAsync = async (req, res) => {
   }
 
   const result = await CategoryService.addCategoryAsync(req.body);
+
   if (result.isSuccess) {
     res.sendCommonValue(result, "Category added successfully", 1);
   } else {
@@ -30,8 +32,9 @@ const addCategoryAsync = async (req, res) => {
 };
 
 const deleteCategoryByIdAsync = async (req, res) => {
-  let ids = req.params.ids;
-  let result = await CategoryService.deleteCategoryByIdAsync(ids);
+  const ids = req.params.ids;
+  const result = await CategoryService.deleteCategoryByIdAsync(ids);
+
   if (result.isSuccess) {
     res.sendCommonValue({}, "Category deleted successfully", 1);
   } else {

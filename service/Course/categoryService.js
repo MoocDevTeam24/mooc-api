@@ -24,7 +24,7 @@ const getCategoryByNameAsync = async (name) => {
 };
 
 const getCategoryListAsync = async (page = 1, pageSize = 10) => {
-  let result = {
+  const result = {
     isSuccess: true,
     message: "",
     data: {
@@ -42,13 +42,9 @@ const getCategoryListAsync = async (page = 1, pageSize = 10) => {
     limit: pageSize,
   });
 
-  result = {
-    isSuccess: true,
-    message: "",
-    data: {
-      items: categories,
-      total: total,
-    },
+  result.data = {
+    items: categories,
+    total,
   };
 
   return result;
