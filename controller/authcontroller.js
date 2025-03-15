@@ -3,39 +3,60 @@ const logger = require("../common/logsetting");
 const { jwtConfig } = require("../appConfig");
 const jwt = require("jsonwebtoken");
 const userservice = require("../service/userservice");
+const crypto = require("crypto");
 
 const loginAsync = async (req, res) => {
   try {
-    let username = req.body.username;
-    let password = req.body.password;
+    const username = req.body.username;
+    const password = req.body.password;
 
     if (!username || !password) {
       return res.sendCommonValue(null, "Username and password are required", 0);
     }
 
-    let result = await userservice.getUserbyNameAsync(username);
+    const result = await userservice.getUserbyNameAsync(username);
 
     if (!result.isSuccess) {
       logger.warn(`Login failed for username: ${username}`);
       return res.sendCommonValue(null, "Authentication failed", 0);
     }
 
-    let isMatch = await bcrypt.compare(password, result.data.password);
+    const isMatch = await bcrypt.compare(password, result.data.password);
+    console.log("isMatch: ", isMatch)
 
     if (!isMatch) {
       logger.warn(`Password mismatch for username: ${username}`);
       return res.sendCommonValue(null, "Authentication failed", 0);
     }
 
-    let user = { id: result.data.id, username: result.data.username };
-    let tokenStr = jwt.sign(user, jwtConfig.secret, {
+    const user = { id: result.data.id, username: result.data.username };
+
+    const tokenStr = jwt.sign(user, jwtConfig.secret, {
       expiresIn: jwtConfig.expiresIn,
+    });
+
+    const csrfToken = crypto.randomBytes(24).toString("hex");
+
+    res.cookie("token", tokenStr, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "None",
+      maxAge: jwtConfig.expiresIn * 1000, 
+    });
+
+    res.cookie("XSRF-TOKEN", csrfToken, {
+      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: jwtConfig.expiresIn * 1000,
     });
 
     logger.info(`User logged in: ${username}`);
 
     return res.sendCommonValue(
-      { token: tokenStr, username: username },
+      {
+        username: username,
+        csrfToken: csrfToken, 
+      },
       "Login successful",
       1
     );
@@ -43,37 +64,32 @@ const loginAsync = async (req, res) => {
     logger.error(`Login error for username: ${req.body.username}, error: ${err}`);
     return res.sendCommonValue(null, "Internal server error", 0);
   }
-
-
-  //   return new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       res.sendCommonValue(
-  //         { id: 1, name: "login", dt: new Date() },
-  //         "loginOutAsync",
-  //         1
-  //       );
-  //       resolve(1);
-  //     }, 2000);
-  //   });
 };
 
-const loginOutAsync = async (req, res) => {
-  // let epassword = req.query.password;
-  // let result = await bcrypt.compare("123456", epassword);
-  res.sendCommonValue("ddd", "loginOutAsync", 1);
-  //   return new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       res.sendCommonValue(
-  //         { id: 1, name: "loginOut", dt: new Date() },
-  //         "loginOutAsync",
-  //         1
-  //       );
-  //       resolve(1);
-  //     }, 2000);
-  //   });
+const logoutAsync = async (req, res) => {
+  try {
+    // 清除 cookie
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+    });
+
+    res.clearCookie("XSRF-TOKEN", {
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+    });
+
+    logger.info(`User logged out`);
+
+    return res.sendCommonValue(null, "Logout successful", 1);
+  } catch (err) {
+    logger.error(`Logout error: ${err}`);
+    return res.sendCommonValue(null, "Internal server error", 0);
+  }
 };
 
 module.exports = {
   loginAsync,
-  loginOutAsync,
+  logoutAsync,
 };
