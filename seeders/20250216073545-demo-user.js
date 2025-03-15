@@ -14,42 +14,23 @@ module.exports = {
      */
 
     await queryInterface.bulkInsert(
-      "demo",
+      "user",
       [
         {
-          title: "title1",
-          mark: "mark 1111111",
-          count: 1,
-          acitve: true,
-          dataTime: new Date(),
+          username: "default user",
+          password:
+            "$2b$10$ig9HBJNu6OgmwSnbPn/jWupbPPq1LC4Ee5uptADcG/Ho3M1e3VM1S",
+          email: "defaultuser@example.com",
+          age: 30,
+          gender: 1,
         },
         {
-          title: "title2",
-          mark: "mark 2222222",
-          count: 2,
-          acitve: true,
-          dataTime: new Date(),
-        },
-        {
-          title: "title3",
-          mark: "mark 3333333",
-          count: 3,
-          acitve: false,
-          dataTime: new Date(),
-        },
-        {
-          title: "title4",
-          mark: "mark 444444",
-          count: 4,
-          acitve: true,
-          dataTime: new Date(),
-        },
-        {
-          title: "title5",
-          mark: "mark 555555",
-          count: 5,
-          acitve: true,
-          dataTime: new Date(),
+          username: "admin",
+          password:
+            "$2b$10$ig9HBJNu6OgmwSnbPn/jWupbPPq1LC4Ee5uptADcG/Ho3M1e3VM1S",
+          email: "admin@example.com",
+          age: 30,
+          gender: 1,
         },
       ],
       {}
@@ -64,8 +45,9 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-    await queryInterface.bulkDelete("demo", null, {});
+    //  await queryInterface.bulkDelete("user", null, {});
+    await queryInterface.bulkDelete("user", null, {});
     // delete table if necessary   to use reset-db command in package.json
-    await queryInterface.dropTable("demo");
+    await queryInterface.dropTable("user");
   },
 };
