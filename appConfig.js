@@ -1,10 +1,12 @@
+require("dotenv").config();
+
 module.exports = {
   jwtConfig: {
-    secret: process.env.JWT_SECRET,
+    secret: process.env.JWT_SECRET,                  
     audience: process.env.JWT_AUDIENCE,
     issuer: process.env.JWT_ISSUER,
-    algorithms: ["HS256"],
-    expiresIn: process.env.JWT_EXPIRES_IN,
+    algorithms: process.env.JWT_ALGORITHMS ? process.env.JWT_ALGORITHMS.split(',') : ["HS256"],
+    expiresIn: process.env.JWT_EXPIRESIN,
   },
   mysqlConfig: {
     host: process.env.MYSQL_HOST,
@@ -14,7 +16,7 @@ module.exports = {
     database: process.env.MYSQL_DATABASE,
   },
   redisConfig: {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST || "127.0.0.1",
+    port: process.env.REDIS_PORT || 6379,
   },
 };

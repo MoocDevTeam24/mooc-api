@@ -2,20 +2,20 @@ var express = require("express");
 require("express-async-errors");
 var router = express.Router();
 
-const { body } = require("express-validator");
 const { commonValidate } = require("../middleware/expressValidator");
 const { loginValidator } = require("../validator/authValidator");
 
-var authcontroller = require("../controller/authcontroller");
+const authcontroller = require("../controller/authcontroller");
+const { authenticateToken, verifyCsrfToken } = require("../middleware/authMiddleware");
 
 /**
 * @openapi
 * '/api/auth/login':
 *  post:
 *     tags:
-*     - auht Controller
-*     summary: Login as a user return token
-*     description: login success get token
+*     - auth Controller
+*     summary: Login as a user and return token via cookie
+*     description: Login returns JWT in HttpOnly cookie + CSRF token
 *     requestBody:
 *      required: true
 *      content:
@@ -37,10 +37,8 @@ var authcontroller = require("../controller/authcontroller");
 *        description: Created
 *      400:
 *        description: Bad Request
-*      404:
-*        description: Not Found
-*      409:
-*        description: Conflict
+*      401:
+*        description: Unauthorized
 *      500:
 *        description: Server Error 
 */
@@ -50,6 +48,46 @@ router.post(
   authcontroller.loginAsync
 );
 
-router.post("/loginOut", authcontroller.loginOutAsync);
+/**
+* @openapi
+* '/api/auth/logout':
+*  post:
+*     tags:
+*     - auth Controller
+*     summary: Logout user and clear token
+*     description: Logout clears JWT and CSRF token cookies
+*     responses:
+*      200:
+*        description: Success
+*      500:
+*        description: Server Error 
+*/
+router.post(
+  "/logout",
+  authenticateToken, 
+  verifyCsrfToken,
+  authcontroller.logoutAsync
+);
+
+/**
+* @openapi
+* '/api/auth/me':
+*  post:
+*     tags:
+*     - auth Controller
+*     summary: Get authenticated user details
+*     description: Retrieve the details of the currently authenicated user based on the provided JWT token
+*     responses:
+*      200:
+*        description: Success
+*      500:
+*        description: Server Error 
+*/
+router.get(
+  "/me",
+  authenticateToken,    
+  verifyCsrfToken,      
+  authcontroller.meAsync
+);
 
 module.exports = router;
