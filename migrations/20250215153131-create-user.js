@@ -1,63 +1,48 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../db/sequelizedb");
+"use strict";
 
-const user = sequelize.define(
-  "user",
-  {
-    // Model attributes are defined here
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull: false,
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      //allowNull:false,
-    },
-    address: {
-      type: DataTypes.STRING,
-      //allowNull:false,
-    },
-    gender: {
-      type: DataTypes.INTEGER,
-      //allowNull:false,
-    },
-    age: {
-      type: DataTypes.STRING,
-      // allowNull:false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    avatar: {
-      type: DataTypes.STRING(255),
-      allowNull: true, // Allow null because avatar might not be provided initially
-    },
-    nickname: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
-    },
-    active: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,// change to true for now, due to data missing columns
-      defaultValue: true,
-    },
-    access: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    avatar: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("user", {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      username: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      email: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      address: {
+        type: Sequelize.STRING(255),
+      },
+      age: {
+        type: Sequelize.INTEGER,
+      },
+      gender: {
+        type: Sequelize.INTEGER,
+      },
+    });
+    console.log("table user created");
   },
-  { timestamps: false, tableName: 'user' }
-);
 
-module.exports = user;
+  async down(queryInterface, Sequelize) {
+    /**
+     * Add reverting commands here.
+     *
+     * Example:
+     * await queryInterface.dropTable('users');
+     */
+    await queryInterface.dropTable('user');
+    console.log("table user droped");
+  },
+};
