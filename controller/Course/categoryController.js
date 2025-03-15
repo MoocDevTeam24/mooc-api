@@ -11,17 +11,36 @@ const getCategoryListAsync = async (req, res) => {
   }
 };
 
+const addCategoryAsync = async (req, res) => {
+  let dbResult = await CategoryService.getCategoryByNameAsync(
+    req.body.CategoryName
+  );
+
+  if (dbResult.isSuccess && dbResult.data.items.length > 0) {
+    res.sendCommonValue({}, "Category name already exists", 400, 400);
+    return;
+  }
+
+  const result = await CategoryService.addCategoryAsync(req.body);
+  if (result.isSuccess) {
+    res.sendCommonValue(result, "Category added successfully", 1);
+  } else {
+    res.sendCommonValue({}, "Category not found", 0);
+  }
+};
+
 const deleteCategoryByIdAsync = async (req, res) => {
   let ids = req.params.ids;
   let result = await CategoryService.deleteCategoryByIdAsync(ids);
   if (result.isSuccess) {
-    res.sendCommonValue({}, "success", 1);
+    res.sendCommonValue({}, "Category deleted successfully", 1);
   } else {
-    res.sendCommonValue({}, "failed", 0);
+    res.sendCommonValue({}, "Category not found", 0);
   }
 };
 
 module.exports = {
   getCategoryListAsync,
+  addCategoryAsync,
   deleteCategoryByIdAsync,
 };
