@@ -52,6 +52,10 @@ app.use("/api/users", userrouter);
 const demorouter = require("./router/demorouter");
 app.use("/api/demos", demorouter);
 
+//config rolerouter
+const rolerouter = require("./router/rolerouter");
+app.use("/api/roles", rolerouter);
+
 //config erorhandle
 const erorhandle = require("./middleware/errorhandling");
 app.use(erorhandle.errorhandling);
