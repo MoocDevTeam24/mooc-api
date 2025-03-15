@@ -6,7 +6,7 @@ module.exports = {
     audience: process.env.JWT_AUDIENCE,
     issuer: process.env.JWT_ISSUER,
     algorithms: process.env.JWT_ALGORITHMS ? process.env.JWT_ALGORITHMS.split(',') : ["HS256"],
-    expiresIn: process.env.JWT_EXPIRESIN,
+    expiresIn: process.env.JWT_EXPIRES_IN,
   },
   mysqlConfig: {
     host: process.env.MYSQL_HOST,

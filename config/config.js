@@ -1,13 +1,12 @@
-require('dotenv').config();
-
+const { mysqlConfig } = require('../appConfig');
 
 module.exports = {
   development: {
-    host: process.env.MYSQL_HOST,
-    port: process.env.MYSQL_PORT,
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
+    host: mysqlConfig.host,
+    port: mysqlConfig.port,
+    username: mysqlConfig.user,
+    password: mysqlConfig.password,
+    database: mysqlConfig.database,
     dialect: 'mysql'
   }
 };
