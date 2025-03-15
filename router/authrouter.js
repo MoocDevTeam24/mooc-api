@@ -69,4 +69,25 @@ router.post(
   authcontroller.logoutAsync
 );
 
+/**
+* @openapi
+* '/api/auth/me':
+*  post:
+*     tags:
+*     - auth Controller
+*     summary: Get authenticated user details
+*     description: Retrieve the details of the currently authenicated user based on the provided JWT token
+*     responses:
+*      200:
+*        description: Success
+*      500:
+*        description: Server Error 
+*/
+router.get(
+  "/me",
+  authenticateToken,    
+  verifyCsrfToken,      
+  authcontroller.meAsync
+);
+
 module.exports = router;
