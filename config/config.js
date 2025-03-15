@@ -1,4 +1,5 @@
-const { mysqlConfig } = require('../appConfig');
+require('dotenv').config();
+
 
 module.exports = {
   development: {
